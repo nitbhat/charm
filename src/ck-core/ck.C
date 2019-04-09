@@ -1822,6 +1822,14 @@ static inline void _sendMsgBranch(int eIdx, void *msg, CkGroupID gID,
 #endif
 }
 
+static inline void _sendMsgBranchWithinNode(int eIdx, void *msg, CkGroupID gID)
+{
+  envelope *env = _prepareMsgBranch(eIdx,msg,gID,ForBocMsg);
+  _TRACE_CREATION_N(env, CmiMyNodeSize());
+  _CldEnqueueWithinNode(env, _infoIdx, _entryTable[eIdx]->noKeep);
+  _TRACE_CREATION_DONE(1);  // since it only creates one creation event.
+}
+
 static inline void _sendMsgBranchMulti(int eIdx, void *msg, CkGroupID gID,
                            int npes, int *pes)
 {
@@ -1951,6 +1959,14 @@ void CkSendMsgBranchGroup(int eIdx,void *msg,CkGroupID gID,CmiGroup grp, int opt
   _TRACE_CREATION_DONE(1); 	// since it only creates one creation event.
   _STATS_RECORD_SEND_BRANCH_N(npes);
   CpvAccess(_qd)->create(npes);
+}
+
+extern "C"
+void CkBroadcastWithinNode(int eIdx, void *msg, CkGroupID gID, int opts)
+{
+  _sendMsgBranchWithinNode(eIdx, msg, gID);
+  _STATS_RECORD_SEND_BRANCH_N(CmiMyNodeSize());
+  CpvAccess(_qd)->create(CmiMyNodeSize());
 }
 
 extern "C"

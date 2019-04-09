@@ -28,6 +28,7 @@ DIRS = \
   jacobi3d \
   jacobi3d-sdag \
   zerocopy \
+  within_node_bcast \
 
 # skip sdag, megatest and commtest
 BGDIRS = \

@@ -1722,7 +1722,10 @@ const char *CldGetStrategy(void);
 void CldEnqueue(int pe, void *msg, int infofn);
 void CldEnqueueMulti(int npes, int *pes, void *msg, int infofn);
 void CldEnqueueGroup(CmiGroup grp, void *msg, int infofn);
+// CldNodeEnqueue enqueues a single message for a node, whereas
+// CldEnqueueWithinNode enqueues a message for each PE on the node.
 void CldNodeEnqueue(int node, void *msg, int infofn);
+void CldEnqueueWithinNode(void *msg, int infofn, int readonly);
 
 /****** CMM: THE MESSAGE MANAGER ******/
 

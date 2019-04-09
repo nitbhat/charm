@@ -392,6 +392,34 @@ void CldEnqueueGroup(CmiGroup grp, void *msg, int infofn)
   CmiSyncMulticastAndFree(grp, len, msg);
 }
 
+void CldEnqueueWithinNode(void *msg, int infofn, int readonly)
+{
+  int len, queueing, priobits,i; unsigned int *prioptr, start, size;
+  CldInfoFn ifn = (CldInfoFn)CmiHandlerToFunction(infofn);
+  CldPackFn pfn;
+  ifn(msg, &pfn, &len, &queueing, &priobits, &prioptr);
+  if (pfn) {
+    pfn(&msg);
+    ifn(msg, &pfn, &len, &queueing, &priobits, &prioptr);
+  }
+  CldSwitchHandler((char *)msg, CpvAccess(CldHandlerIndex));
+  CmiSetInfo(msg,infofn);
+
+  start = CmiNodeFirst(CmiMyNode());
+  size = CmiMyNodeSize();
+  if (readonly) {
+    for(i=1;i<size;i++) {
+      CmiReference(msg);
+      CmiSyncSendAndFree(start + i, len, msg);
+    }
+  } else {
+    for(i=1;i<size;i++) {
+      CmiSyncSend(start + i, len, msg);
+    }
+  }
+  CmiSyncSendAndFree(start, len, msg);
+}
+
 void CldEnqueueMulti(int npes, int *pes, void *msg, int infofn)
 {
   int len, queueing, priobits,i; unsigned int *prioptr;
