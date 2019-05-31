@@ -1768,6 +1768,8 @@ static inline envelope *_prepareMsgBranch(int eIdx,void *msg,CkGroupID gID,int t
   env->setEpIdx(eIdx);
   env->setGroupNum(gID);
   env->setSrcPe(CkMyPe());
+
+  CMI_MSG_READONLY(env) = _entryTable[eIdx]->noKeep;
   /*
 #if CMK_ERROR_CHECKING
   nodeRedMgr.setZero();
@@ -1826,7 +1828,7 @@ static inline void _sendMsgBranchWithinNode(int eIdx, void *msg, CkGroupID gID)
 {
   envelope *env = _prepareMsgBranch(eIdx,msg,gID,ForBocMsg);
   _TRACE_CREATION_N(env, CmiMyNodeSize());
-  _CldEnqueueWithinNode(env, _infoIdx, _entryTable[eIdx]->noKeep);
+  _CldEnqueueWithinNode(env, _infoIdx);
   _TRACE_CREATION_DONE(1);  // since it only creates one creation event.
 }
 
