@@ -11,6 +11,7 @@ public:
   main(CkArgMsg *m)
   {
     int a;
+    int b;
     if(CkNumPes()>2) {
       CkPrintf("Run this program on 1 or 2 processors only.\n");
       CkExit(1);
