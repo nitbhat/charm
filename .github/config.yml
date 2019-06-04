@@ -1,0 +1,5 @@
+# Configuration for new-issue-welcome - https://github.com/behaviorbot/new-issue-welcome
+
+# Comment to be posted to on first time issues
+newIssueWelcomeComment: >
+  Hello! this message is being displayed coz you opened an issue! Thanks!
