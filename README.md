@@ -1,5 +1,7 @@
 test 1
 
+test 2
+
 # Charm++
 
 [![Build Status](https://travis-ci.org/UIUC-PPL/charm.svg?branch=master)](https://travis-ci.org/UIUC-PPL/charm)
